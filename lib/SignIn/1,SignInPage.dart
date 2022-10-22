@@ -39,35 +39,29 @@ class _SignInPageState extends State<SignInPage> {
   void startTimer() {
     const oneSec = Duration(seconds: 1);
     // ignore: unnecessary_new
-    _timer = new Timer.periodic(
-      oneSec,
-      (Timer timer) => setState(
-        () {
-          if (_start == 2) {
-            _showExpiredDialog(context);
-            otpVisible = false;
-          }
-          if (_start == 1) {
-            setState(() {
-              resendVisible = true;
-            });
-          }
-          if (_start < 1) {
-            timer.cancel();
-          } else {
-            _start = _start - 1;
-          }
-        },
-      ),
-    );
+    _timer = new Timer.periodic(oneSec, (Timer timer) {
+      if (this.mounted) {
+        setState(
+          () {
+            if (_start == 2) {
+              _showExpiredDialog(context);
+              otpVisible = false;
+            }
+            if (_start == 1) {}
+            if (_start < 1) {
+              timer.cancel();
+            } else {
+              _start = _start - 1;
+            }
+          },
+        );
+      }
+    });
   }
 
   _showExpiredDialog(BuildContext context) {
     VoidCallback okCallBack = () => {
           Navigator.of(context).pop(),
-          setState(() {
-            resendVisible = false;
-          }),
         };
     BlurryDialog alert = BlurryDialog(okCallBack);
 
@@ -97,9 +91,12 @@ class _SignInPageState extends State<SignInPage> {
     VoidCallback okCallBack = () => {
           Navigator.of(context).pop(),
           _timer!.cancel(),
-          setState(() {
-            otpVisible = false;
-          }),
+          if (this.mounted)
+            {
+              setState(() {
+                otpVisible = false;
+              }),
+            }
         };
     TooManyTrialsBlurryDialog alert = TooManyTrialsBlurryDialog(okCallBack);
 
@@ -312,7 +309,7 @@ class _SignInPageState extends State<SignInPage> {
                             // decorationColor: Colors.white,
                             ),
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(bottom: 0),
+                          contentPadding: const EdgeInsets.only(bottom: 20),
 
                           //Label Text/////////////////////////////////////////////////////////
                           hintText: '_  _  _  _  _  _',
@@ -373,9 +370,6 @@ class _SignInPageState extends State<SignInPage> {
 
                   GestureDetector(
                       onTap: () async {
-                        setState(() {
-                          isLoading = true;
-                        });
                         if (_formKey.currentState!.validate()) {
                           if (otpVisible) {
                             VoidCallback codeInvalid =
@@ -391,10 +385,6 @@ class _SignInPageState extends State<SignInPage> {
                             _showPhoneDialog(context);
                           }
                         }
-
-                        setState(() {
-                          isLoading = false;
-                        });
                       },
                       child: isLoading
                           ? const Center(
