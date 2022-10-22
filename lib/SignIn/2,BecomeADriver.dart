@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, prefer_const_constructors_in_immutables
+// ignore_for_file: file_names, prefer_const_constructors_in_immutables, unused_element
 
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,8 @@ class _BecomeADriverState extends State<BecomeADriver> {
       phoneCode = countryCode.toString();
     });
 
-    print("New Country selected: " + countryCode.toString());
+    // ignore: avoid_print
+    print("New Country selected: $countryCode");
   }
 
   @override

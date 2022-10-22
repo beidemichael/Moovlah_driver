@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marquee_widget/marquee_widget.dart';
@@ -149,7 +151,7 @@ class _ProfileState extends State<Profile> {
                   width: 10,
                 ),
                 Marquee(
-                  backDuration: Duration(milliseconds: 500),
+                  backDuration: const Duration(milliseconds: 500),
                   directionMarguee: DirectionMarguee.oneDirection,
                   child: Text(text,
                       style: const TextStyle(

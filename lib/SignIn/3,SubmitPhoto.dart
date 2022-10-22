@@ -1,11 +1,10 @@
-// ignore_for_file: file_names, prefer_const_constructors_in_immutables
+// ignore_for_file: file_names, prefer_const_constructors_in_immutables, prefer_typing_uninitialized_variables, unused_element, deprecated_member_use
 
 import 'dart:io';
 
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../Shared/YellowButton.dart';

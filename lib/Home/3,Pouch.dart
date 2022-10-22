@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marquee_widget/marquee_widget.dart';
@@ -63,7 +65,7 @@ class _PouchState extends State<Pouch> {
                           fontSize: 13.0,
                           color: Color.fromARGB(255, 100, 100, 100),
                           fontWeight: FontWeight.w600)),
-                  const Text('S\$' + '15.65',
+                  const Text('S\$' '15.65',
                       style: TextStyle(
                           fontSize: 40.0,
                           color: Colors.black,
@@ -76,7 +78,7 @@ class _PouchState extends State<Pouch> {
                           fontSize: 13.0,
                           color: Color.fromARGB(255, 100, 100, 100),
                           fontWeight: FontWeight.w600)),
-                  const Text('S\$' + '75.15',
+                  const Text('S\$' '75.15',
                       style: TextStyle(
                           fontSize: 30.0,
                           color: Colors.black,
@@ -89,7 +91,7 @@ class _PouchState extends State<Pouch> {
                           fontSize: 13.0,
                           color: Color.fromARGB(255, 100, 100, 100),
                           fontWeight: FontWeight.w600)),
-                  const Text('S\$' + '0.65',
+                  const Text('S\$' '0.65',
                       style: TextStyle(
                           fontSize: 30.0,
                           color: Colors.black,
@@ -165,7 +167,7 @@ class _PouchState extends State<Pouch> {
                   width: 10,
                 ),
                 Marquee(
-                  backDuration: Duration(milliseconds: 500),
+                  backDuration: const Duration(milliseconds: 500),
                   directionMarguee: DirectionMarguee.oneDirection,
                   child: Text(text,
                       style: const TextStyle(
