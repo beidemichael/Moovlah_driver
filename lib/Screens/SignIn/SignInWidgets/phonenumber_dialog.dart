@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, use_key_in_widget_constructors
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
@@ -14,17 +16,17 @@ class PhoneBlurryDialog extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
         child: AlertDialog(
         
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(30.0))),
-          contentPadding: EdgeInsets.all(0),
-          content: Container(
+          contentPadding: const EdgeInsets.all(0),
+          content: SizedBox(
             width: 250.0,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                SizedBox(
+                const SizedBox(
                   height: 15.0,
                 ),
                 Row(
@@ -39,25 +41,22 @@ class PhoneBlurryDialog extends StatelessWidget {
                           color: Colors.grey[900],
                           fontWeight: FontWeight.w600),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[],
-                    ),
+                  
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15.0,
                 ),
-                Divider(
+                const Divider(
                   color: Colors.grey,
                   height: 4.0,
                 ),
                 Center(
                   child: Padding(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                           horizontal: 25.0, vertical: 25.0),
                       child: Text(
-                        "Is " + phonenumber + " your phone number?",
+                        "Is $phonenumber your phone number?",
                         style: TextStyle(
                             color: Colors.grey[900],
                             fontWeight: FontWeight.w300),
@@ -72,10 +71,10 @@ class PhoneBlurryDialog extends StatelessWidget {
                           noCallBack();
                         },
                         child: Container(
-                          padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                          padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                           decoration: BoxDecoration(
                             color: Colors.grey[50],
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(30.0),
                               topRight: Radius.circular(30.0),
                             ),
@@ -96,16 +95,17 @@ class PhoneBlurryDialog extends StatelessWidget {
                       child: InkWell(
                         onTap: () {
                           yesCallBack();
+                          Navigator.of(context).pop();
                         },
                         child: Container(
-                          padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-                          decoration: BoxDecoration(
+                          padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+                          decoration: const BoxDecoration(
                             color: Color(0xFFFFF600),
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(30.0),
                                 bottomRight: Radius.circular(30.0)),
                           ),
-                          child: Center(
+                          child: const Center(
                             child: Text('YES',
                                 style: TextStyle(
                                     fontSize: 20.0,

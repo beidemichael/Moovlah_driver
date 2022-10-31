@@ -11,21 +11,17 @@ class UserAuth {
 class UserInformation {
   String userName;
   String phoneNumber;
-  String email;
   String type;
   String userUid;
-  String businessName;
-  bool proofOfDelivery;
+  bool approved;
   String documentId;
 
   UserInformation({
     required this.userName,
-    required this.email,
     required this.type,
     required this.phoneNumber,
     required this.userUid,
-    required this.businessName,
-    required this.proofOfDelivery,
+    required this.approved,
     required this.documentId,
   });
 }

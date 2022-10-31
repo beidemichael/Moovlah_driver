@@ -1,15 +1,24 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:moovlah_driver/wrapper.dart';
+import 'package:moovlah_driver/Screens/wrapper.dart';
 import 'package:provider/provider.dart';
 
 import 'Models/models.dart';
+import 'Models/registerModel.dart';
 import 'Service/auth.dart';
+
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: ChangeNotifierProvider(
+      create: (context) => Register(),
+      child: const MyApp(),
+    ),
+  ));
 }
 
 class MyApp extends StatelessWidget {

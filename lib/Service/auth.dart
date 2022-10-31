@@ -1,11 +1,9 @@
-// ignore_for_file: unused_local_variable, avoid_print, use_build_context_synchronously
+// ignore_for_file: unused_local_variable, avoid_print, use_build_context_synchronously, prefer_const_constructors
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '../Models/models.dart';
-import 'Database.dart';
-
 class AuthServices {
   String? wholePhoneNumber;
 
@@ -13,7 +11,6 @@ class AuthServices {
   AuthServices({this.wholePhoneNumber, this.otpCode});
   User? _firebaseUser;
   AuthCredential? _phoneAuthCredential;
-  int? _code;
   static String? _verificationId;
 
   static SnackBar customSnackBar({required String content}) {
@@ -47,14 +44,13 @@ class AuthServices {
   }
 
   static signOut() async {
-     try {
+    try {
       // signout code
       await FirebaseAuth.instance.signOut();
       // _firebaseUser = null;
     } catch (e) {
       print(e.toString());
     }
-  
   }
 
   void submitOTP(
@@ -64,25 +60,26 @@ class AuthServices {
 
     /// when used different phoneNumber other than the current (running) device
     /// we need to use OTP to get `phoneAuthCredential` which is inturn used to signIn/login
-    this._phoneAuthCredential = PhoneAuthProvider.credential(
+    _phoneAuthCredential = PhoneAuthProvider.credential(
         verificationId: _verificationId!, smsCode: smsCode);
 
     login(wholePhoneNumber, codeInvalid, cancelTimer);
   }
-   Future<void> login(
+
+  Future<void> login(
       wholePhoneNumber, Function codeInvalid, Function cancelTimer) async {
     /// This method is used to login the user
     /// `AuthCredential`(`_phoneAuthCredential`) is needed for the signIn method
     /// After the signIn method from `AuthResult` we can get `FirebaserUser`(`_firebaseUser`)
     try {
       await FirebaseAuth.instance
-          .signInWithCredential(this._phoneAuthCredential!)
+          .signInWithCredential(_phoneAuthCredential!)
           .then((authRes) {
         _firebaseUser = authRes.user;
 
         print(_firebaseUser.toString());
       });
-      final User user = await FirebaseAuth.instance.currentUser!;
+      final User user = FirebaseAuth.instance.currentUser!;
       final uid = user.uid;
 
       // await DatabaseService(userPhoneNumber: wholePhoneNumber)
@@ -105,22 +102,23 @@ class AuthServices {
 //   }
 // }
   }
-    Future<void> submitPhoneNumber(Function toManyTimes) async {
+
+  Future<void> submitPhoneNumber(Function toManyTimes) async {
     /// The below functions are the callbacks, separated so as to make code more redable
     void verificationCompleted(AuthCredential phoneAuthCredential) async {
       print('verificationCompleted');
 
-      this._phoneAuthCredential = phoneAuthCredential;
+      _phoneAuthCredential = phoneAuthCredential;
       print(phoneAuthCredential);
       try {
         await FirebaseAuth.instance
-            .signInWithCredential(this._phoneAuthCredential!)
+            .signInWithCredential(_phoneAuthCredential!)
             .then((authRes) {
           _firebaseUser = authRes.user;
 
           print(_firebaseUser.toString());
         });
-        final User user = await FirebaseAuth.instance.currentUser!;
+        final User user = FirebaseAuth.instance.currentUser!;
         final uid = user.uid;
 
         // await DatabaseService(userPhoneNumber: wholePhoneNumber)
@@ -143,7 +141,6 @@ class AuthServices {
       print('codeSent');
       _verificationId = verificationId;
       print(verificationId);
-      this._code = code;
       print(code.toString());
     }
 
@@ -173,7 +170,7 @@ class AuthServices {
       /// After automatic code retrival `tmeout` this function is called
       codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
     ); // All the callbacks are above
-  } 
+  }
 
   static signUpEmailAndPassword({
     required BuildContext context,
@@ -193,8 +190,8 @@ class AuthServices {
       // Provider.of<Order>(context, listen: false).changeScreen('welcome');
       var userUid = credential.user?.uid;
 
-      await DatabaseService().newUserData(userName, phoneNumber, emailAddress,
-          password, type, userUid.toString(), businessName);
+      // await DatabaseService().newUserData(userName, phoneNumber, emailAddress,
+      //     password, type, userUid.toString(), businessName);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -251,8 +248,8 @@ class AuthServices {
       required String emailAddress,
       required String password}) async {
     try {
-      final credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: emailAddress.trim(), password: password.trim());
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailAddress.trim(), password: password.trim());
       // Provider.of<Order>(context, listen: false).changeScreen('welcome');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -302,8 +299,7 @@ class AuthServices {
       } else {
         print(e);
       }
-    }
-    catch (e) {
+    } catch (e) {
       print(e);
     }
   }

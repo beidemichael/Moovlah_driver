@@ -15,72 +15,28 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('Vehicles');
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('Users');
+  final CollectionReference driverCollection =
+      FirebaseFirestore.instance.collection('Drivers');
   final CollectionReference orderCollection =
       FirebaseFirestore.instance.collection('Orders');
 
 //1//////////////////User//////////////////////////////////////////////////
 //1.1//////////////////Write//////////////////////////////////////////////////
-  Future newUserData(
-    String userName,
-    String phoneNumber,
-    String email,
-    String password,
-    String type,
-    String userUid,
-    String businessName,
-  ) async {
-    userCollection
-        .where('userUid', isEqualTo: userUid)
-        .get()
-        .then((docs) async {
-      if (docs.docs.isEmpty) {
-        return await userCollection.doc(userUid).set({
-          'created': Timestamp.now(),
-          'name': userName,
-          'phoneNumber': phoneNumber,
-          'email': email,
-          'password': password,
-          'type': type,
-          'userUid': userUid,
-          'businessName': businessName,
-          'proofOfDelivery': false,
-        });
-      }
-    });
-  }
 
 //1.1//////////////////Write//////////////////////////////////////////////////
 //1.2//////////////////Edit//////////////////////////////////////////////////
-  Future updateProofOfDelivery(
-    bool proofOfDelivery,
-    String userUid,
-  ) async {
-    return await userCollection.doc(userUid).update({
-      'proofOfDelivery': !proofOfDelivery,
-    });
-  }
 
-  Future updateUsername(
-    String userName,
-    String userUid,
-  ) async {
-    return await userCollection.doc(userUid).update({
-      'name': userName,
-    });
-  }
 //1.2//////////////////Edit//////////////////////////////////////////////////
 //1.3//////////////////Read//////////////////////////////////////////////////
 
   List<UserInformation> _userInfoListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return UserInformation(
-        userName: (doc.data() as dynamic)['name'] ?? '',
-        email: (doc.data() as dynamic)['email'] ?? '',
-        type: (doc.data() as dynamic)['type'] ?? false,
+        userName: (doc.data() as dynamic)['driverName'] ?? '',
+        type: (doc.data() as dynamic)['vehicleType'] ?? false,
         phoneNumber: (doc.data() as dynamic)['phoneNumber'] ?? '',
         userUid: (doc.data() as dynamic)['userUid'] ?? '',
-        businessName: (doc.data() as dynamic)['businessName'] ?? '',
-        proofOfDelivery: (doc.data() as dynamic)['proofOfDelivery'] ?? '',
+        approved: (doc.data() as dynamic)['approved'] ?? false,
         documentId: doc.reference.id,
       );
     }).toList();
@@ -88,7 +44,7 @@ class DatabaseService {
 
   //orders lounges stream
   Stream<List<UserInformation>> get userInfo {
-    return userCollection
+    return driverCollection
         .where('userUid', isEqualTo: userUid)
         .snapshots()
         .map(_userInfoListFromSnapshot);
@@ -194,72 +150,45 @@ class DatabaseService {
 
 //3.1//////////////////Read//////////////////////////////////////////////////
 //3.2//////////////////Write//////////////////////////////////////////////////
-  Future order(
-    String vehicleName,
-    double vehicelPrice,
-    List extraServiceName,
-    List extraServicePrice,
-    List specificationName,
-    List specificationPrice,
-    String orderRemark,
-    DateTime time,
-    List locationListName,
-    List locationListlocationLat,
-    List locationListlocationLong,
-    List specificLocationListlocationLat,
-    List specificLocationListlocationLong,
-    List locationListdescription,
-    List locationListphoneNumber,
-    List locationListcontactName,
-    List locationListfloorAndUnitNumber,
-    int totalDistanceInt,
-    double totalDistancePrice,
-    double totalPrice,
-    bool favouriteDriverFirst,
-    bool cash,
-    String paidBy,
-    var moreDetailsImage,
-    String userName,
-    String type,
-    String email,
-    String userUid,
+  Future registerInformation(
+    String screen,
+    String driverName,
+    String vehiclePlateNumber,
+    String driverNRICNumber,
+    String driverLicenseNumber,
+    String vehicleType,
+    String driverPhoto,
+    String driverNRICPhoto,
+    String driverLicensePhoto,
+    var phoneNumber,
+    var userUid,
   ) async {
-    orderCollection
-        .add({
-          'vehicleName': vehicleName,
-          'vehicelPrice': vehicelPrice,
-          'extraServiceName': extraServiceName,
-          'extraServicePrice': extraServicePrice,
-          'specificationName': specificationName,
-          'specificationPrice': specificationPrice,
-          'orderRemark': orderRemark,
-          'time': time,
-          'locationListName': locationListName,
-          'locationListlocationLat': locationListlocationLat,
-          'locationListlocationlong': locationListlocationLong,
-          'specificLocationListlocationLat': specificLocationListlocationLat,
-          'specificLocationListlocationLong': specificLocationListlocationLong,
-          'locationListdescription': locationListdescription,
-          'locationListphoneNumber': locationListphoneNumber,
-          'locationListcontactName': locationListcontactName,
-          'locationListfloorAndUnitNumber': locationListfloorAndUnitNumber,
-          'totalDistanceInt': totalDistanceInt,
-          'totalDistancePrice': totalDistancePrice,
-          'totalPrice': totalPrice,
-          'favouriteDriverFirst': favouriteDriverFirst,
-          'cash': cash,
-          'paidBy': paidBy,
-          'moreDetailsImage': moreDetailsImage,
-          'userName': userName,
-          'type': type,
-          'email': email,
-          'userUid': userUid,
-          'isTaken': false,
-          'isDelivered': false,
-          'isCanceled': false,
-        })
-        .then((value) => print("Order Added"))
-        .catchError((error) => print("Failed to publish Order: $error"));
+    driverCollection
+        .where('userUid', isEqualTo: userUid)
+        .get()
+        .then((docs) async {
+      if (docs.docs.isEmpty) {
+        return await driverCollection
+            .doc(userUid)
+            .set({
+              'created': Timestamp.now(),
+              'screen': screen,
+              'driverName': driverName,
+              'vehiclePlateNumber': vehiclePlateNumber,
+              'driverNRICNumber': driverNRICNumber,
+              'driverLicenseNumber': driverLicenseNumber,
+              'vehicleType': vehicleType,
+              'driverPhoto': driverPhoto,
+              'driverNRICPhoto': driverNRICPhoto,
+              'driverLicensePhoto': driverLicensePhoto,
+              'phoneNumber': phoneNumber,
+              'userUid': userUid,
+              'approved': false
+            })
+            .then((value) => print("Rgistration Info Added"))
+            .catchError((error) => print("Failed to Register: $error"));
+      }
+    });
   }
 //3.2//////////////////Write//////////////////////////////////////////////////
 //3///////////////////Order//////////////////////////////////////////////////

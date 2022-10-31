@@ -5,11 +5,11 @@ import 'dart:async';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:moovlah_driver/SignIn/SignInWidgets/error_signingin.dart';
-import 'package:moovlah_driver/SignIn/SignInWidgets/too_many_times.dart';
+import 'package:moovlah_driver/Screens/SignIn/SignInWidgets/error_signingin.dart';
+import 'package:moovlah_driver/Screens/SignIn/SignInWidgets/too_many_times.dart';
 
-import '../Service/auth.dart';
-import '../Shared/YellowButton.dart';
+import '../../Service/auth.dart';
+import '../../Shared/YellowButton.dart';
 import 'SignInWidgets/expired_code_blury_dialog.dart';
 import 'SignInWidgets/phonenumber_dialog.dart';
 
@@ -40,7 +40,7 @@ class _SignInPageState extends State<SignInPage> {
     const oneSec = Duration(seconds: 1);
     // ignore: unnecessary_new
     _timer = new Timer.periodic(oneSec, (Timer timer) {
-      if (this.mounted) {
+      if (mounted) {
         setState(
           () {
             if (_start == 2) {
@@ -61,7 +61,7 @@ class _SignInPageState extends State<SignInPage> {
 
   _showExpiredDialog(BuildContext context) {
     VoidCallback okCallBack = () => {
-          Navigator.of(context).pop(),
+          // Navigator.of(context).pop(),
         };
     BlurryDialog alert = BlurryDialog(okCallBack);
 
@@ -75,7 +75,7 @@ class _SignInPageState extends State<SignInPage> {
 
   _showErrorDialog(BuildContext context) {
     VoidCallback okCallBack = () => {
-          Navigator.of(context).pop(),
+          // Navigator.of(context).pop(),
         };
     ErrorSigningInBlurryDialog alert = ErrorSigningInBlurryDialog(okCallBack);
 
@@ -89,9 +89,9 @@ class _SignInPageState extends State<SignInPage> {
 
   _tooManyTimesTried(BuildContext context) {
     VoidCallback okCallBack = () => {
-          Navigator.of(context).pop(),
+          // Navigator.of(context).pop(),
           _timer!.cancel(),
-          if (this.mounted)
+          if (mounted)
             {
               setState(() {
                 otpVisible = false;
@@ -113,7 +113,7 @@ class _SignInPageState extends State<SignInPage> {
           _tooManyTimesTried(context),
         };
     VoidCallback yesCallBack = () => {
-          Navigator.of(context).pop(),
+          // Navigator.of(context).pop(),
           AuthServices(wholePhoneNumber: wholePhoneNumber)
               .submitPhoneNumber(toManyTimes),
           startTimer(),
@@ -186,7 +186,7 @@ class _SignInPageState extends State<SignInPage> {
                   Visibility(
                     visible: otpVisible,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
                       child: Text(
                           // ignore: prefer_interpolation_to_compose_strings
                           'Please enter the activation code we have sent via SMS to:  ' +

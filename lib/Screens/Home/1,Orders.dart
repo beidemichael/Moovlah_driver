@@ -2,9 +2,12 @@
 
 import "package:flutter/material.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
-import '../Service/auth.dart';
+import '../../Models/models.dart';
+import '../../Service/auth.dart';
 import '1.1,MessageBox.dart';
+import 'OrdersWidget/OrdesCard.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -16,9 +19,11 @@ class Orders extends StatefulWidget {
 class _OrdersState extends State<Orders> {
   @override
   Widget build(BuildContext context) {
+    final orders = Provider.of<List<OrdersModel>>(context);
     return Scaffold(
       body: SafeArea(
-        child: Stack(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
@@ -88,12 +93,43 @@ class _OrdersState extends State<Orders> {
                 ),
               ),
             ),
-            const Center(
-              child: Text('Orders',
-                  style: TextStyle(
-                      fontSize: 13.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600)),
+            Container(
+              color: Colors.white,
+              height: MediaQuery.of(context).size.height - 120,
+              width: MediaQuery.of(context).size.width,
+              child: ListView.builder(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  itemCount: orders.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        // ignore: prefer_const_constructors
+                        decoration: BoxDecoration(
+                          // border: Border.all(width: 1, color: Colors.black),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade400,
+                              blurRadius: 2.0, //effect of softening the shadow
+                              spreadRadius:
+                                  0.2, //effecet of extending the shadow
+                              offset: const Offset(
+                                  0.0, //horizontal
+                                  2.0 //vertical
+                                  ),
+                            ),
+                          ],
+                          color: Colors.white,
+                          // ignore: prefer_const_constructors
+                          borderRadius: BorderRadius.all(
+                            const Radius.circular(10.0),
+                          ),
+                        ),
+                        child: OrdersCard(order: orders[index]),
+                      ),
+                    );
+                  }),
             ),
           ],
         ),
