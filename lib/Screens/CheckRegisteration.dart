@@ -28,13 +28,7 @@ class CheckRegisteration extends StatelessWidget {
           : userInfo.isEmpty
               ? const ScreenSelector()
               : userInfo[0].approved
-                  ? StreamProvider<List<OrdersModel>>.value(
-                value: DatabaseService().orders,
-                initialData: const [],
-                catchError: (_, __) => [],
-                child:   const HomeScreen()) 
-                  
-                 
+                  ? const HomeScreen()
                   : const PendingScreen(),
     );
   }

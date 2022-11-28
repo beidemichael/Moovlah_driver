@@ -37,6 +37,9 @@ class DatabaseService {
         phoneNumber: (doc.data() as dynamic)['phoneNumber'] ?? '',
         userUid: (doc.data() as dynamic)['userUid'] ?? '',
         approved: (doc.data() as dynamic)['approved'] ?? false,
+        userPhoto: (doc.data() as dynamic)['driverPhoto'] ?? '',
+        vehiclePlateNumber: (doc.data() as dynamic)['vehiclePlateNumber'] ?? '',
+        vehicleType: (doc.data() as dynamic)['vehicleType'] ?? '',
         documentId: doc.reference.id,
       );
     }).toList();
@@ -69,6 +72,7 @@ class DatabaseService {
         specificationPrice: (doc.data() as dynamic)['SpecificationPrice'] ?? [],
         price: (doc.data() as dynamic)['Price'] ?? 0.0,
         pricePerKM: (doc.data() as dynamic)['PerKM'] ?? 0.0,
+
         documentId: doc.reference.id,
       );
     }).toList();
@@ -133,6 +137,9 @@ class DatabaseService {
         type: (doc.data() as dynamic)['type'] ?? '',
         email: (doc.data() as dynamic)['email'] ?? '',
         userUid: (doc.data() as dynamic)['userUid'] ?? '',
+        driverPhoto: (doc.data() as dynamic)['driverPhoto'] ?? '',
+        vehiclePlateNumber: (doc.data() as dynamic)['vehiclePlateNumber'] ?? '',
+        vehicleType: (doc.data() as dynamic)['vehiclePlateNumber'] ?? '' ,
         documentId: doc.reference.id,
       );
     }).toList();
@@ -140,16 +147,68 @@ class DatabaseService {
 
   Stream<List<OrdersModel>> get orders {
     return orderCollection
-        .where('userUid', isEqualTo: userUid)
+        .where('isTaken', isEqualTo: false)
         .orderBy('time', descending: true)
         .snapshots()
         .handleError((onError) {
       print('errore in orders read: $onError');
     }).map(_ordersListFromSnapshot);
   }
+  Stream<List<OrdersModel>> get inProgressOrders {
+    return orderCollection
+        .where('isTaken', isEqualTo: true)
+        .where('driverUserUid', isEqualTo: userUid)
+        .orderBy('time', descending: true)
+        .snapshots()
+        .handleError((onError) {
+      print('errore in orders read: $onError');
+    }).map(_ordersListFromSnapshot);
+  }
+   Stream<List<OrdersModel>> get concludedOrders {
+    return orderCollection
+        .where('isDelivered', isEqualTo: true)
+        .where('driverUserUid', isEqualTo: userUid)
+        .orderBy('time', descending: true)
+        .snapshots()
+        .handleError((onError) {
+      print('errore in orders read: $onError');
+    }).map(_ordersListFromSnapshot);
+  }
+   Stream<List<OrdersModel>> get droppedOrders {
+    return orderCollection
+        .where('isCanceled', isEqualTo: true)
+        .where('driverUserUid', isEqualTo: userUid)
+        .orderBy('time', descending: true)
+        .snapshots()
+        .handleError((onError) {
+      print('errore in orders read: $onError');
+    }).map(_ordersListFromSnapshot);
+  }
+  
 
 //3.1//////////////////Read//////////////////////////////////////////////////
 //3.2//////////////////Write//////////////////////////////////////////////////
+
+  Future OrderTaken(
+    String driverUserUid,
+    String driverName,
+    String driverPhoto,
+    String driverPhone,
+    String vehiclePlateNumber,
+    String vehicleType,
+    String orderDocId,
+  ) async {
+    orderCollection.doc(orderDocId).update({
+      'driverUserUid': driverUserUid,
+      'driverName': driverName,
+      'driverPhoto': driverPhoto,
+      'driverPhone': driverPhone,
+      'vehiclePlateNumber': vehiclePlateNumber,
+      'vehicleType': vehicleType,
+      'isTaken':true,
+    });
+  }
+
   Future registerInformation(
     String screen,
     String driverName,
@@ -183,7 +242,8 @@ class DatabaseService {
               'driverLicensePhoto': driverLicensePhoto,
               'phoneNumber': phoneNumber,
               'userUid': userUid,
-              'approved': false
+              'approved': false,
+              'online':true
             })
             .then((value) => print("Rgistration Info Added"))
             .catchError((error) => print("Failed to Register: $error"));

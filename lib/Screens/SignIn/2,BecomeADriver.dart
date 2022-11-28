@@ -39,7 +39,7 @@ class _BecomeADriverState extends State<BecomeADriver> {
     final driverLicenseNumberProvider =
         Provider.of<Register>(context).driverLicenseNumber;
     final vehicleTypeProvider = Provider.of<Register>(context).vehicleType;
-    final vehicles = Provider.of<List<Vehicles>>(context);
+    final vehicles = Provider.of<List<Vehicles>>(context); 
 
     return Scaffold(
       body: Center(

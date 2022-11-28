@@ -7,18 +7,18 @@ import 'Models/models.dart';
 import 'Models/registerModel.dart';
 import 'Service/auth.dart';
 
-
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: ChangeNotifierProvider(
-      create: (context) => Register(),
-      child: const MyApp(),
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: ChangeNotifierProvider(
+        create: (context) => Register(),
+        child: const MyApp(),
+      ),
     ),
-  ));
+  );
 }
 
 class MyApp extends StatelessWidget {

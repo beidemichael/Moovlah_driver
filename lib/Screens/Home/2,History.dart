@@ -1,6 +1,11 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:moovlah_driver/Screens/Home/2,HistoryWidget/InProgress.dart';
+import 'package:moovlah_driver/Service/Database.dart';
+import 'package:provider/provider.dart';
+
+import '../../Models/models.dart';
 
 class History extends StatefulWidget {
   const History({super.key});
@@ -57,24 +62,26 @@ class _HistoryState extends State<History> {
             iconTheme: const IconThemeData(color: Colors.black)),
         body: TabBarView(
           children: [
-            Center(
-              child: Image.asset(
-                'assets/undraw_empty_cart_co35.png',
-                height: MediaQuery.of(context).size.height * .25,
-              ),
+            StreamProvider<List<OrdersModel>>.value(
+              value: DatabaseService().inProgressOrders,
+              initialData: const [],
+              catchError: (_, __) => [],
+              child: const  InProgress(),
             ),
-            Center(
-              child: Image.asset(
-                'assets/undraw_empty_cart_co35.png',
-                height: MediaQuery.of(context).size.height * .25,
-              ),
+           StreamProvider<List<OrdersModel>>.value(
+              value: DatabaseService().concludedOrders,
+              initialData: const [],
+              catchError: (_, __) => [],
+              child: const InProgress(),
             ),
-            Center(
-              child: Image.asset(
-                'assets/undraw_empty_cart_co35.png',
-                height: MediaQuery.of(context).size.height * .25,
-              ),
+            StreamProvider<List<OrdersModel>>.value(
+              value: DatabaseService().droppedOrders,
+              initialData: const [],
+              catchError: (_, __) => [],
+              child: const InProgress(),
             ),
+            
+           
           ],
         ),
       ),

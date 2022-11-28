@@ -68,7 +68,7 @@ class PhoneBlurryDialog extends StatelessWidget {
                       flex: 1,
                       child: InkWell(
                         onTap: () {
-                          noCallBack();
+                           Navigator.of(context).pop();
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),

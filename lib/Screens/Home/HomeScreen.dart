@@ -3,6 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:moovlah_driver/Screens/Home/4,Profile.dart';
+import 'package:moovlah_driver/Service/Database.dart';
+import 'package:provider/provider.dart';
+import '../../Models/models.dart';
 import '2,History.dart';
 import '1,Orders.dart';
 import '3,Pouch.dart';
@@ -17,14 +20,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
   List screens = [
-    const Orders(),
+    StreamProvider<List<OrdersModel>>.value(
+        value: DatabaseService().orders,
+        initialData: const [],
+        catchError: (_, __) => [],
+        child: const Orders()),
     const History(),
     const Pouch(),
     const Profile()
   ];
   @override
   Widget build(BuildContext context) {
-     
     return Scaffold(
       body: Stack(
         children: [
@@ -56,12 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical:7.0),
+                  padding: const EdgeInsets.symmetric(vertical: 7.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       bottomIcon(FontAwesomeIcons.anglesDown, 'Orders', 0),
-                      bottomIcon(FontAwesomeIcons.clockRotateLeft, 'History', 1),
+                      bottomIcon(
+                          FontAwesomeIcons.clockRotateLeft, 'History', 1),
                       bottomIcon(FontAwesomeIcons.coins, 'Pouch', 2),
                       bottomIcon(FontAwesomeIcons.solidUser, 'Profile', 3),
                     ],

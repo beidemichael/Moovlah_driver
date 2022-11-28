@@ -16,6 +16,10 @@ class UserInformation {
   bool approved;
   String documentId;
 
+  String userPhoto;
+  String vehiclePlateNumber;
+  String vehicleType;
+
   UserInformation({
     required this.userName,
     required this.type,
@@ -23,6 +27,9 @@ class UserInformation {
     required this.userUid,
     required this.approved,
     required this.documentId,
+    required this.userPhoto,
+    required this.vehiclePlateNumber,
+    required this.vehicleType,
   });
 }
 
@@ -123,29 +130,36 @@ class OrdersModel {
   bool isTaken;
   bool isDelivered;
   bool isCanceled;
-  OrdersModel(
-      {required this.cash,
-      required this.email,
-      required this.extraServiceName,
-      required this.extraServicePrice,
-      required this.favouriteDriverFirst,
-      required this.moreDetailsImage,
-      required this.orderRemark,
-      required this.paidBy,
-      required this.specificationName,
-      required this.specificationPrice,
-      required this.time,
-      required this.totalDistanceInt,
-      required this.totalDistancePrice,
-      required this.totalPrice,
-      required this.type,
-      required this.userName,
-      required this.userUid,
-      required this.vehicelPrice,
-      required this.vehicleName,
-      required this.documentId,
-      required this.ordersModelLocationSub,
-      required this.isCanceled,
-      required this.isDelivered,
-      required this.isTaken});
+  String driverPhoto;
+  String vehiclePlateNumber;
+  String vehicleType;
+  OrdersModel({
+    required this.cash,
+    required this.email,
+    required this.extraServiceName,
+    required this.extraServicePrice,
+    required this.favouriteDriverFirst,
+    required this.moreDetailsImage,
+    required this.orderRemark,
+    required this.paidBy,
+    required this.specificationName,
+    required this.specificationPrice,
+    required this.time,
+    required this.totalDistanceInt,
+    required this.totalDistancePrice,
+    required this.totalPrice,
+    required this.type,
+    required this.userName,
+    required this.userUid,
+    required this.vehicelPrice,
+    required this.vehicleName,
+    required this.documentId,
+    required this.ordersModelLocationSub,
+    required this.isCanceled,
+    required this.isDelivered,
+    required this.isTaken,
+    required this.driverPhoto,
+    required this.vehiclePlateNumber,
+    required this.vehicleType,
+  });
 }

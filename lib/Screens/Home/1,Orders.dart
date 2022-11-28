@@ -1,13 +1,16 @@
 // ignore_for_file: file_names
 
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../Models/models.dart';
+import '../../Service/Database.dart';
 import '../../Service/auth.dart';
 import '1.1,MessageBox.dart';
-import 'OrdersWidget/OrdesCard.dart';
+import '1,OrdersWidget/OrdersCardDetail.dart';
+import '1,OrdersWidget/OrdesCard.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -22,8 +25,8 @@ class _OrdersState extends State<Orders> {
     final orders = Provider.of<List<OrdersModel>>(context);
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: ListView(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
@@ -95,42 +98,66 @@ class _OrdersState extends State<Orders> {
             ),
             Container(
               color: Colors.white,
-              height: MediaQuery.of(context).size.height - 120,
+              height: MediaQuery.of(context).size.height - 180,
               width: MediaQuery.of(context).size.width,
               child: ListView.builder(
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
                   itemCount: orders.length,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        // ignore: prefer_const_constructors
-                        decoration: BoxDecoration(
-                          // border: Border.all(width: 1, color: Colors.black),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade400,
-                              blurRadius: 2.0, //effect of softening the shadow
-                              spreadRadius:
-                                  0.2, //effecet of extending the shadow
-                              offset: const Offset(
-                                  0.0, //horizontal
-                                  2.0 //vertical
-                                  ),
-                            ),
-                          ],
-                          color: Colors.white,
+                    return GestureDetector(
+                      onTap: () {
+                        final user = FirebaseAuth.instance.currentUser;
+                        final userUid = user!.uid;
+                        if (userUid != null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => StreamProvider<
+                                          List<UserInformation>>.value(
+                                      value: DatabaseService(userUid: userUid)
+                                          .userInfo,
+                                      initialData: const [],
+                                      child: OrdersCardDetail(
+                                          order: orders[index]))));
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
                           // ignore: prefer_const_constructors
-                          borderRadius: BorderRadius.all(
-                            const Radius.circular(10.0),
+                          decoration: BoxDecoration(
+                            // border: Border.all(width: 1, color: Colors.black),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade400,
+                                blurRadius:
+                                    2.0, //effect of softening the shadow
+                                spreadRadius:
+                                    0.2, //effecet of extending the shadow
+                                offset: const Offset(
+                                    0.0, //horizontal
+                                    2.0 //vertical
+                                    ),
+                              ),
+                            ],
+                            color: Colors.white,
+                            // ignore: prefer_const_constructors
+                            borderRadius: BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
                           ),
+                          child: OrdersCard(order: orders[index]),
                         ),
-                        child: OrdersCard(order: orders[index]),
                       ),
                     );
                   }),
             ),
+            // ignore: prefer_const_constructors
+            Container(
+              color: Colors.white,
+              height: 500,
+            )
           ],
         ),
       ),

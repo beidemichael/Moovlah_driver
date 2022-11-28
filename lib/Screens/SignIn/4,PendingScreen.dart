@@ -31,10 +31,10 @@ class PendingScreen extends StatelessWidget {
                   fontWeight: FontWeight.w400)),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const HomeScreen()),
+              // );
             },
             child: const Text('Pending for Approval...',
                 style: TextStyle(
