@@ -1,8 +1,17 @@
 // ignore_for_file: file_names
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marquee_widget/marquee_widget.dart';
+import 'package:moovlah_driver/Screens/Home/3,PouchWidget/AccountStatement.dart';
+import 'package:moovlah_driver/Screens/Home/3,PouchWidget/BankAccountInformation.dart';
+import 'package:moovlah_driver/Screens/Home/3,PouchWidget/WithDrawalBottomSheet.dart';
+import 'package:provider/provider.dart';
+
+import '../../Models/models.dart';
+import '../../Service/Database.dart';
+import '3,PouchWidget/TopUpBottomSheet copy.dart';
 
 class Pouch extends StatefulWidget {
   const Pouch({super.key});
@@ -12,8 +21,56 @@ class Pouch extends StatefulWidget {
 }
 
 class _PouchState extends State<Pouch> {
+  double underReview = 0.0;
   @override
   Widget build(BuildContext context) {
+    final userInfo = Provider.of<List<UserInformation>>(context);
+    UserInformation userInformation = userInfo[0];
+    final accountStatement = Provider.of<List<Payment>>(context);
+    if (accountStatement != null && accountStatement.length != 0) {
+      for (int i = 0; i < accountStatement.length; i++) {
+        underReview = underReview + accountStatement[i].amount.toDouble();
+      }
+    }
+    void whenTopUp() {
+      showModalBottomSheet(
+          backgroundColor: Colors.transparent,
+          context: context,
+          isScrollControlled: true,
+          builder: (context) {
+            return Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: FractionallySizedBox(
+                heightFactor: 0.3,
+                child: Container(
+                  // padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: TopUpBottomSheet(userInformation: userInformation),
+                ),
+              ),
+            );
+          });
+    }
+
+    void whenWithDrawal() {
+      showModalBottomSheet(
+          backgroundColor: Colors.transparent,
+          context: context,
+          isScrollControlled: true,
+          builder: (context) {
+            return Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: FractionallySizedBox(
+                heightFactor: 0.3,
+                child: Container(
+                  // padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child:
+                      WithDrawalBottomSheet(userInformation: userInformation),
+                ),
+              ),
+            );
+          });
+    }
+
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
@@ -21,11 +78,13 @@ class _PouchState extends State<Pouch> {
             mainAxisSize: MainAxisSize.min,
             // ignore: prefer_const_literals_to_create_immutables
             children: [
-              const Text('My Earnings',
-                  style: TextStyle(
-                      fontSize: 21.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600)),
+              const Text(
+                'My Earnings',
+                style: TextStyle(
+                    fontSize: 21.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600),
+              ),
             ],
           ),
           excludeHeaderSemantics: true,
@@ -38,9 +97,8 @@ class _PouchState extends State<Pouch> {
           Container(
             // height: 200,
             width: MediaQuery.of(context).size.width,
-
             decoration: BoxDecoration(
-              color: Colors.grey[350],
+              color: Colors.white,
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.shade400,
@@ -65,8 +123,8 @@ class _PouchState extends State<Pouch> {
                           fontSize: 13.0,
                           color: Color.fromARGB(255, 100, 100, 100),
                           fontWeight: FontWeight.w600)),
-                  const Text('S\$' '15.65',
-                      style: TextStyle(
+                  Text('S\$${userInformation.totalEarnings}',
+                      style: const TextStyle(
                           fontSize: 40.0,
                           color: Colors.black,
                           fontWeight: FontWeight.w500)),
@@ -78,8 +136,8 @@ class _PouchState extends State<Pouch> {
                           fontSize: 13.0,
                           color: Color.fromARGB(255, 100, 100, 100),
                           fontWeight: FontWeight.w600)),
-                  const Text('S\$' '75.15',
-                      style: TextStyle(
+                  Text('S\$${userInformation.deposit}',
+                      style: const TextStyle(
                           fontSize: 30.0,
                           color: Colors.black,
                           fontWeight: FontWeight.w500)),
@@ -91,8 +149,8 @@ class _PouchState extends State<Pouch> {
                           fontSize: 13.0,
                           color: Color.fromARGB(255, 100, 100, 100),
                           fontWeight: FontWeight.w600)),
-                  const Text('S\$' '0.65',
-                      style: TextStyle(
+                  Text('S\$$underReview',
+                      style: const TextStyle(
                           fontSize: 30.0,
                           color: Colors.black,
                           fontWeight: FontWeight.w500)),
@@ -103,20 +161,58 @@ class _PouchState extends State<Pouch> {
           const SizedBox(
             height: 20,
           ),
-          choices('Top-up', FontAwesomeIcons.moneyBill, 'top'),
+          GestureDetector(
+              onTap: () {
+                whenTopUp();
+              },
+              child: choices('Top-up', FontAwesomeIcons.moneyBill, 'top')),
           const SizedBox(
             height: 10,
           ),
-          choices('Withdrawal', FontAwesomeIcons.anglesRight, 'middle'),
+          GestureDetector(
+              onTap: () {
+                whenWithDrawal();
+              },
+              child: choices(
+                  'Withdrawal', FontAwesomeIcons.anglesRight, 'middle')),
           const SizedBox(
             height: 10,
           ),
-          choices('Account Statement', FontAwesomeIcons.receipt, 'middle'),
+          GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StreamProvider<List<Payment>>.value(
+                        value: DatabaseService().accountStatement,
+                        initialData: const [],
+                        catchError: (_, __) => [],
+                        child: const AccountStatement()),
+                  ),
+                );
+              },
+              child: choices(
+                  'Account Statement', FontAwesomeIcons.receipt, 'middle')),
           const SizedBox(
             height: 10,
           ),
-          choices('Bank Account Information', FontAwesomeIcons.buildingColumns,
-              'bottom'),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      StreamProvider<List<BankInformation>>.value(
+                          value: DatabaseService().bankInformation,
+                          initialData: const [],
+                          catchError: (_, __) => [],
+                          child: const BankAccountInformation()),
+                ),
+              );
+            },
+            child: choices('Bank Account Information',
+                FontAwesomeIcons.buildingColumns, 'bottom'),
+          ),
         ],
       ),
     );

@@ -55,7 +55,7 @@ class _OrdersState extends State<Orders> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        AuthServices.signOut();
+                       
                       },
                       child: Container(
                         height: 45,

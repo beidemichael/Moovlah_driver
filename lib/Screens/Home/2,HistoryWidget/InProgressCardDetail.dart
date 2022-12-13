@@ -22,6 +22,8 @@ class _InProgressCardDetailState extends State<InProgressCardDetail> {
 
     if (userInformation != null && userInformation.length != 0) {
       userInfo = UserInformation(
+          deposit: userInformation[0].deposit,
+          totalEarnings: userInformation[0].totalEarnings,
           userName: userInformation[0].userName,
           type: userInformation[0].type,
           phoneNumber: userInformation[0].phoneNumber,

@@ -22,7 +22,7 @@ class _MessageBoxState extends State<MessageBox> {
                     fontWeight: FontWeight.w500)),
           ),
           Tab(
-            child: Text('Notifiacation',
+            child: Text('Notification',
                 style: TextStyle(
                     fontSize: 18.0,
                     color: Colors.black,

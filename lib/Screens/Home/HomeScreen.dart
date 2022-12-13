@@ -26,7 +26,11 @@ class _HomeScreenState extends State<HomeScreen> {
         catchError: (_, __) => [],
         child: const Orders()),
     const History(),
-    const Pouch(),
+    StreamProvider<List<Payment>>.value(
+        value: DatabaseService().accountStatement,
+        initialData: const [],
+        catchError: (_, __) => [],
+        child: const Pouch()),
     const Profile()
   ];
   @override

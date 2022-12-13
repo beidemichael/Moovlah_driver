@@ -17,6 +17,8 @@ class UserInformation {
   String documentId;
 
   String userPhoto;
+  var deposit;
+  var totalEarnings;
   String vehiclePlateNumber;
   String vehicleType;
 
@@ -30,6 +32,8 @@ class UserInformation {
     required this.userPhoto,
     required this.vehiclePlateNumber,
     required this.vehicleType,
+    required this.deposit,
+    required this.totalEarnings,
   });
 }
 
@@ -161,5 +165,39 @@ class OrdersModel {
     required this.driverPhoto,
     required this.vehiclePlateNumber,
     required this.vehicleType,
+  });
+}
+
+class Payment {
+  dynamic amount;
+  bool approved;
+  String userUid;
+  String type;
+  String documentId;
+  var created;
+
+  Payment(
+      {required this.amount,
+      required this.approved,
+      required this.type,
+      required this.userUid,
+      required this.documentId,
+      required this.created});
+}
+
+class BankInformation {
+  String userUid;
+  String bankName;
+  String accountNumber;
+  String holderName;
+  String documentId;
+   var created;
+  BankInformation({
+    required this.accountNumber,
+    required this.bankName,
+    required this.documentId,
+    required this.holderName,
+    required this.userUid,
+    required this.created,
   });
 }

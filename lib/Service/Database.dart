@@ -19,6 +19,10 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('Drivers');
   final CollectionReference orderCollection =
       FirebaseFirestore.instance.collection('Orders');
+  final CollectionReference paymentCollection =
+      FirebaseFirestore.instance.collection('Payment');
+  final CollectionReference bankCollection =
+      FirebaseFirestore.instance.collection('Bank');
 
 //1//////////////////User//////////////////////////////////////////////////
 //1.1//////////////////Write//////////////////////////////////////////////////
@@ -39,6 +43,8 @@ class DatabaseService {
         approved: (doc.data() as dynamic)['approved'] ?? false,
         userPhoto: (doc.data() as dynamic)['driverPhoto'] ?? '',
         vehiclePlateNumber: (doc.data() as dynamic)['vehiclePlateNumber'] ?? '',
+        totalEarnings: (doc.data() as dynamic)['totalEarnings'] ?? '',
+        deposit:(doc.data() as dynamic)['deposit'] ?? '' ,
         vehicleType: (doc.data() as dynamic)['vehicleType'] ?? '',
         documentId: doc.reference.id,
       );
@@ -72,7 +78,6 @@ class DatabaseService {
         specificationPrice: (doc.data() as dynamic)['SpecificationPrice'] ?? [],
         price: (doc.data() as dynamic)['Price'] ?? 0.0,
         pricePerKM: (doc.data() as dynamic)['PerKM'] ?? 0.0,
-
         documentId: doc.reference.id,
       );
     }).toList();
@@ -139,7 +144,7 @@ class DatabaseService {
         userUid: (doc.data() as dynamic)['userUid'] ?? '',
         driverPhoto: (doc.data() as dynamic)['driverPhoto'] ?? '',
         vehiclePlateNumber: (doc.data() as dynamic)['vehiclePlateNumber'] ?? '',
-        vehicleType: (doc.data() as dynamic)['vehiclePlateNumber'] ?? '' ,
+        vehicleType: (doc.data() as dynamic)['vehiclePlateNumber'] ?? '',
         documentId: doc.reference.id,
       );
     }).toList();
@@ -154,6 +159,7 @@ class DatabaseService {
       print('errore in orders read: $onError');
     }).map(_ordersListFromSnapshot);
   }
+
   Stream<List<OrdersModel>> get inProgressOrders {
     return orderCollection
         .where('isTaken', isEqualTo: true)
@@ -164,7 +170,8 @@ class DatabaseService {
       print('errore in orders read: $onError');
     }).map(_ordersListFromSnapshot);
   }
-   Stream<List<OrdersModel>> get concludedOrders {
+
+  Stream<List<OrdersModel>> get concludedOrders {
     return orderCollection
         .where('isDelivered', isEqualTo: true)
         .where('driverUserUid', isEqualTo: userUid)
@@ -174,7 +181,8 @@ class DatabaseService {
       print('errore in orders read: $onError');
     }).map(_ordersListFromSnapshot);
   }
-   Stream<List<OrdersModel>> get droppedOrders {
+
+  Stream<List<OrdersModel>> get droppedOrders {
     return orderCollection
         .where('isCanceled', isEqualTo: true)
         .where('driverUserUid', isEqualTo: userUid)
@@ -184,7 +192,6 @@ class DatabaseService {
       print('errore in orders read: $onError');
     }).map(_ordersListFromSnapshot);
   }
-  
 
 //3.1//////////////////Read//////////////////////////////////////////////////
 //3.2//////////////////Write//////////////////////////////////////////////////
@@ -205,7 +212,7 @@ class DatabaseService {
       'driverPhone': driverPhone,
       'vehiclePlateNumber': vehiclePlateNumber,
       'vehicleType': vehicleType,
-      'isTaken':true,
+      'isTaken': true,
     });
   }
 
@@ -230,6 +237,8 @@ class DatabaseService {
         return await driverCollection
             .doc(userUid)
             .set({
+              'totalEarnings': 0.0,
+              'deposit': 0.0,
               'created': Timestamp.now(),
               'screen': screen,
               'driverName': driverName,
@@ -243,7 +252,7 @@ class DatabaseService {
               'phoneNumber': phoneNumber,
               'userUid': userUid,
               'approved': false,
-              'online':true
+              'online': true
             })
             .then((value) => print("Rgistration Info Added"))
             .catchError((error) => print("Failed to Register: $error"));
@@ -252,4 +261,107 @@ class DatabaseService {
   }
 //3.2//////////////////Write//////////////////////////////////////////////////
 //3///////////////////Order//////////////////////////////////////////////////
+
+//4///////////////////Payment//////////////////////////////////////////////////
+//4.1//////////////////Read//////////////////////////////////////////////////
+  List<Payment> accountStatementListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Payment(
+        amount: (doc.data() as dynamic)['amount'] ?? 0.0,
+        approved: (doc.data() as dynamic)['approved'] ?? false,
+        type: (doc.data() as dynamic)['type'] ?? '',
+        userUid: (doc.data() as dynamic)['userUid'] ?? '',
+        created: (doc.data() as dynamic)['created'] ?? '',
+        documentId: doc.reference.id,
+      );
+    }).toList();
+  }
+
+  Stream<List<Payment>> get accountStatement {
+    return paymentCollection
+        .orderBy('created', descending: true)
+        .snapshots()
+        .handleError((onError) {
+      print(onError.toString());
+    }).map(accountStatementListFromSnapshot);
+  }
+
+//4.1//////////////////Read//////////////////////////////////////////////////
+//4.2//////////////////Write//////////////////////////////////////////////////
+  Future TopUp(
+    double amount,
+    String userName,
+    String userUid,
+  ) async {
+    paymentCollection.add({
+      'created': Timestamp.now(),
+      'amount': amount,
+      'approved': false,
+      'userUid': userUid,
+      'userName': userName,
+      'type': 'TopUp'
+    });
+  }
+
+  Future WithDraw(
+    double amount,
+    String userName,
+    String userUid,
+  ) async {
+    paymentCollection.add({
+      'created': Timestamp.now(),
+      'amount': amount,
+      'approved': false,
+      'userUid': userUid,
+      'userName': userName,
+      'type': 'Withdraw'
+    });
+  }
+
+//4.2//////////////////Write//////////////////////////////////////////////////
+//4///////////////////Payment//////////////////////////////////////////////////
+//5///////////////////BankInformation//////////////////////////////////////////
+//4.1//////////////////Read///////////////////////////////////////////////////
+  List<BankInformation> bankInformationListFromSnapshot(
+      QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return BankInformation(
+        accountNumber: (doc.data() as dynamic)['accountNumber'] ?? '',
+        bankName: (doc.data() as dynamic)['bankName'] ?? '',
+        holderName: (doc.data() as dynamic)['holderName'] ?? '',
+        userUid: (doc.data() as dynamic)['userUid'] ?? '',
+        created: (doc.data() as dynamic)['created'] ?? '',
+        documentId: doc.reference.id,
+      );
+    }).toList();
+  }
+
+  Stream<List<BankInformation>> get bankInformation {
+    return bankCollection
+        .where('userUid', isEqualTo: userUid)
+        .orderBy('created', descending: true)
+        .snapshots()
+        .handleError((onError) {
+      print(onError.toString());
+    }).map(bankInformationListFromSnapshot);
+  }
+
+//4.1//////////////////Read///////////////////////////////////////////////////
+//5.2//////////////////Write//////////////////////////////////////////////////
+  Future AddBankInformation(
+    String userUid,
+    String bankName,
+    String accountNumber,
+    String holderName,
+  ) async {
+    bankCollection.doc(userUid).set({
+      'created': Timestamp.now(),
+      'userUid': userUid,
+      'accountNumber': accountNumber,
+      'bankName': bankName,
+      'holderName': holderName,
+    });
+  }
+//5.2//////////////////Write//////////////////////////////////////////////////
+//5///////////////////BankInformation//////////////////////////////////////////
 }
