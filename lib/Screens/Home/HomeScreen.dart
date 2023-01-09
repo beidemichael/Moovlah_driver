@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:moovlah_driver/Screens/Home/4,Profile.dart';
@@ -11,7 +12,8 @@ import '1,Orders.dart';
 import '3,Pouch.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+ 
+ const HomeScreen({super.key,});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -19,12 +21,25 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
+
   List screens = [
-    StreamProvider<List<OrdersModel>>.value(
-        value: DatabaseService().orders,
-        initialData: const [],
-        catchError: (_, __) => [],
-        child: const Orders()),
+    MultiProvider(
+      providers: [
+        StreamProvider<List<OrdersModel>>.value(
+          value: DatabaseService().orders,
+          initialData: const [],
+          catchError: (_, __) => [],
+        ),
+        // StreamProvider<List<UserInformation>>.value(
+        //   value:
+        //       DatabaseService(userUid: FirebaseAuth.instance.currentUser!.uid)
+        //           .userInfo,
+        //   initialData: const [],
+        //   catchError: (_, __) => [],
+        // )
+      ],
+      child: const Orders(),
+    ),
     const History(),
     StreamProvider<List<Payment>>.value(
         value: DatabaseService().accountStatement,

@@ -23,6 +23,8 @@ class _OrdersState extends State<Orders> {
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<List<OrdersModel>>(context);
+    final userInfo = Provider.of<List<UserInformation>>(context);
+    UserInformation userInformation = userInfo[0];
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -55,24 +57,24 @@ class _OrdersState extends State<Orders> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                       
+                        DatabaseService().UserOnlineEdit(userInformation.userUid, userInformation.online);
                       },
                       child: Container(
                         height: 45,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFF600),
+                          color:userInformation.online==true? const Color(0xFFFFF600):Colors.grey[200],
                           border: Border.all(width: 1, color: Colors.black),
                           borderRadius: BorderRadius.circular(35.0),
                         ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
+                        child:  Padding(
+                          padding: const EdgeInsets.symmetric(
                             horizontal: 25.0,
                           ),
                           child: Center(
-                            child: Text('Online',
-                                style: TextStyle(
+                            child: Text(userInformation.online==true?'Online':'Offline',
+                                style:  TextStyle(
                                     fontSize: 17.0,
-                                    color: Colors.black,
+                                    color:userInformation.online==true? Colors.black:Colors.grey[500],
                                     fontWeight: FontWeight.w600)),
                           ),
                         ),

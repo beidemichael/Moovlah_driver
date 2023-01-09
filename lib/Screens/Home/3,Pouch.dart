@@ -42,10 +42,7 @@ class _PouchState extends State<Pouch> {
               padding: MediaQuery.of(context).viewInsets,
               child: FractionallySizedBox(
                 heightFactor: 0.3,
-                child: Container(
-                  // padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: TopUpBottomSheet(userInformation: userInformation),
-                ),
+                child: TopUpBottomSheet(userInformation: userInformation),
               ),
             );
           });
@@ -61,11 +58,7 @@ class _PouchState extends State<Pouch> {
               padding: MediaQuery.of(context).viewInsets,
               child: FractionallySizedBox(
                 heightFactor: 0.3,
-                child: Container(
-                  // padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child:
-                      WithDrawalBottomSheet(userInformation: userInformation),
-                ),
+                child: WithDrawalBottomSheet(userInformation: userInformation),
               ),
             );
           });

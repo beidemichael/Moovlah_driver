@@ -21,6 +21,7 @@ class UserInformation {
   var totalEarnings;
   String vehiclePlateNumber;
   String vehicleType;
+  bool online;
 
   UserInformation({
     required this.userName,
@@ -34,6 +35,7 @@ class UserInformation {
     required this.vehicleType,
     required this.deposit,
     required this.totalEarnings,
+    required this.online
   });
 }
 

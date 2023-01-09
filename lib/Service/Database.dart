@@ -29,7 +29,14 @@ class DatabaseService {
 
 //1.1//////////////////Write//////////////////////////////////////////////////
 //1.2//////////////////Edit//////////////////////////////////////////////////
-
+  Future UserOnlineEdit(
+    String userUid,
+    bool online,
+  ) async {
+    driverCollection.doc(userUid).update({
+      'online': !online,
+    });
+  }
 //1.2//////////////////Edit//////////////////////////////////////////////////
 //1.3//////////////////Read//////////////////////////////////////////////////
 
@@ -44,8 +51,9 @@ class DatabaseService {
         userPhoto: (doc.data() as dynamic)['driverPhoto'] ?? '',
         vehiclePlateNumber: (doc.data() as dynamic)['vehiclePlateNumber'] ?? '',
         totalEarnings: (doc.data() as dynamic)['totalEarnings'] ?? '',
-        deposit:(doc.data() as dynamic)['deposit'] ?? '' ,
+        deposit: (doc.data() as dynamic)['deposit'] ?? '',
         vehicleType: (doc.data() as dynamic)['vehicleType'] ?? '',
+        online: (doc.data() as dynamic)['online'] ?? false,
         documentId: doc.reference.id,
       );
     }).toList();
@@ -118,7 +126,7 @@ class DatabaseService {
           locationListlocationLat:
               (doc.data() as dynamic)['locationListlocationLat'] ?? [],
           locationListlocationLong:
-              (doc.data() as dynamic)['locationListlocationLong'] ?? [],
+              (doc.data() as dynamic)['locationListlocationlong'] ?? [],
           specificLocationListlocationLat:
               (doc.data() as dynamic)['specificLocationListlocationLat'] ?? [],
           specificLocationListlocationLong:

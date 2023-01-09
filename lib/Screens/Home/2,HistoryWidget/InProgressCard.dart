@@ -140,68 +140,8 @@ class _InProgressCardState extends State<InProgressCard> {
                   ),
                 ],
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                child: Container(
-                  height: 60,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 230, 230, 230),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                  ),
-                  child: Stack(
-                    children: [
-                      const Positioned(
-                        top: 0.0,
-                        bottom: 0.0,
-                        left: 10,
-                        child: Icon(
-                          FontAwesomeIcons.envelopeOpenText,
-                          size: 25.0,
-                          color: Color.fromARGB(255, 158, 158, 158),
-                        ),
-                      ),
-                      Positioned(
-                        top: 0.0,
-                        bottom: 0.0,
-                        left: 50,
-                        child: Row(
-                          children: [
-                            Text(widget.order.orderRemark,
-                                style: const TextStyle(
-                                    fontSize: 20.0,
-                                    color: Color.fromARGB(255, 158, 158, 158),
-                                    fontWeight: FontWeight.w600)),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // const Divider(),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // ignore: prefer_interpolation_to_compose_strings
-                    Text('S\$' + widget.order.totalPrice.toString(),
-                        style: const TextStyle(
-                            fontSize: 23.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600)),
-                    Text(widget.order.cash == true ? 'Cash' : 'Credit',
-                        style: const TextStyle(
-                            fontSize: 25.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700)),
-                  ],
-                ),
+              SizedBox(
+                height: 10,
               ),
             ],
           ),

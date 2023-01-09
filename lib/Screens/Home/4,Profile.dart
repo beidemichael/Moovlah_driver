@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marquee_widget/marquee_widget.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../Models/models.dart';
 import '../../Service/auth.dart';
+import '4,Profile/BarChart.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -152,7 +154,15 @@ class _ProfileState extends State<Profile> {
           const SizedBox(
             height: 10,
           ),
-          choices('Earning Insights', FontAwesomeIcons.piggyBank, 'middle'),
+          GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BarChartSample3()),
+                );
+              },
+              child: choices(
+                  'Earning Insights', FontAwesomeIcons.piggyBank, 'middle')),
           const SizedBox(
             height: 10,
           ),

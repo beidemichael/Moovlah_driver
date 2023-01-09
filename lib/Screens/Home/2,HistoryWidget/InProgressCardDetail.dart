@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:moovlah_driver/Screens/Home/2,HistoryWidget/mapRoute.dart';
 import 'package:moovlah_driver/Service/Database.dart';
 import 'package:moovlah_driver/Shared/YellowButton.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class _InProgressCardDetailState extends State<InProgressCardDetail> {
 
     if (userInformation != null && userInformation.length != 0) {
       userInfo = UserInformation(
+          online: userInformation[0].online,
           deposit: userInformation[0].deposit,
           totalEarnings: userInformation[0].totalEarnings,
           userName: userInformation[0].userName,
@@ -355,53 +357,24 @@ class _InProgressCardDetailState extends State<InProgressCardDetail> {
                                   ),
                                 ),
                               ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Center(
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MapRoute(order: widget.order,)));
+                                      },
+                                      child: YellowButton(text: 'View on Map')))
                             ],
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    Center(
-                        child: GestureDetector(
-                      onTap: () {
-                        DatabaseService().OrderTaken(
-                            userInfo.userUid,
-                            userInfo.userName,
-                            userInfo.userPhoto,
-                            userInfo.phoneNumber,
-                            userInfo.vehiclePlateNumber,
-                            userInfo.vehicleType,
-                            widget.order.documentId);
-                        Navigator.of(context).pop();
-                      },
-                      child: Stack(
-                        children: [
-                          Center(child: YellowButton(text: 'Take Order')),
-                          Positioned(
-                            top: 0.0,
-                            bottom: 0.0,
-                            right: MediaQuery.of(context).size.width * 0.25,
-                            child: const Icon(
-                              FontAwesomeIcons.anglesRight,
-                              size: 25.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Positioned(
-                            top: 0.0,
-                            bottom: 0.0,
-                            left: MediaQuery.of(context).size.width * 0.25,
-                            child: const Icon(
-                              FontAwesomeIcons.anglesRight,
-                              size: 25.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
                     const SizedBox(
                       height: 50,
                     ),

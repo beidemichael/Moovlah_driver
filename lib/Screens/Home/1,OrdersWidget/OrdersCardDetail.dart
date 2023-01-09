@@ -22,6 +22,7 @@ class _OrdersCardDetailState extends State<OrdersCardDetail> {
 
     if (userInformation != null && userInformation.length != 0) {
       userInfo = UserInformation(
+          online: userInformation[0].online,
           deposit: userInformation[0].deposit,
           totalEarnings: userInformation[0].totalEarnings,
           userName: userInformation[0].userName,
