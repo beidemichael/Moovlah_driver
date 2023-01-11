@@ -8,6 +8,7 @@ import 'package:marquee_widget/marquee_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../Models/models.dart';
+import '../../Service/Database.dart';
 import '../../Service/auth.dart';
 import '4,Profile/BarChart.dart';
 
@@ -158,7 +159,18 @@ class _ProfileState extends State<Profile> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BarChartSample3()),
+                  MaterialPageRoute(
+                    builder: (context) => MultiProvider(
+                      providers: [
+                        StreamProvider<List<OrdersModel>>.value(
+                          value: DatabaseService().orders,
+                          initialData: const [],
+                          catchError: (_, __) => [],
+                        ),
+                      ],
+                      child: const BarChartSample3(),
+                    ),
+                  ),
                 );
               },
               child: choices(

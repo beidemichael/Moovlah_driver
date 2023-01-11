@@ -1,193 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:moovlah_driver/Screens/Home/4,Profile/CustomBarChart/ArrageByDateLogic.dart';
+import 'package:moovlah_driver/Screens/Home/4,Profile/CustomBarChart/CustomBarChartWidgets/BottomText.dart';
+import 'package:moovlah_driver/Screens/Home/4,Profile/CustomBarChart/CustomBarChart.dart';
+import 'package:moovlah_driver/Screens/Home/4,Profile/IncomeStat.dart';
+import 'package:provider/provider.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
-class BarChartScreen extends StatelessWidget {
-  const BarChartScreen();
-
-  @override
-  Widget build(BuildContext context) {
-    return BarChart(
-      BarChartData(
-        barTouchData: barTouchData,
-        titlesData: titlesData,
-        borderData: borderData,
-        barGroups: barGroups,
-        gridData: FlGridData(show: false),
-        alignment: BarChartAlignment.spaceAround,
-        maxY: 20,
-      ),
-    );
-  }
-
-  BarTouchData get barTouchData => BarTouchData(
-        enabled: false,
-        touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.transparent,
-          tooltipPadding: EdgeInsets.zero,
-          tooltipMargin: 8,
-          getTooltipItem: (
-            BarChartGroupData group,
-            int groupIndex,
-            BarChartRodData rod,
-            int rodIndex,
-          ) {
-            return BarTooltipItem(
-              rod.toY.round().toString(),
-              const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            );
-          },
-        ),
-      );
-
-  Widget getTitles(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff7589a2),
-      fontWeight: FontWeight.bold,
-      fontSize: 14,
-    );
-    String text;
-    switch (value.toInt()) {
-      case 0:
-        text = 'Mon';
-        break;
-      case 1:
-        text = 'Tue';
-        break;
-      case 2:
-        text = 'Wed';
-        break;
-      case 3:
-        text = 'Thu';
-        break;
-      case 4:
-        text = 'Fri';
-        break;
-      case 5:
-        text = 'Sat';
-        break;
-      case 6:
-        text = 'Sun';
-        break;
-      default:
-        text = '';
-        break;
-    }
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 4,
-      child: Text(text, style: style),
-    );
-  }
-
-  FlTitlesData get titlesData => FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            getTitlesWidget: getTitles,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      );
-
-  FlBorderData get borderData => FlBorderData(
-        show: false,
-      );
-
-  LinearGradient get _barsGradient => const LinearGradient(
-        colors: [
-          Colors.lightBlueAccent,
-          Colors.greenAccent,
-        ],
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-      );
-
-  List<BarChartGroupData> get barGroups => [
-        BarChartGroupData(
-          x: 0,
-          barRods: [
-            BarChartRodData(
-              toY: 8,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 1,
-          barRods: [
-            BarChartRodData(
-              toY: 10,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 2,
-          barRods: [
-            BarChartRodData(
-              toY: 14,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 3,
-          barRods: [
-            BarChartRodData(
-              toY: 15,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 4,
-          barRods: [
-            BarChartRodData(
-              toY: 13,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 5,
-          barRods: [
-            BarChartRodData(
-              toY: 10,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 6,
-          barRods: [
-            BarChartRodData(
-              toY: 16,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-      ];
-}
+import '../../../Models/models.dart';
 
 class BarChartSample3 extends StatefulWidget {
   const BarChartSample3({super.key});
@@ -197,19 +19,139 @@ class BarChartSample3 extends StatefulWidget {
 }
 
 class BarChartSample3State extends State<BarChartSample3> {
+  int max = 0;
+  String item = 'Day';
+  var items = [
+    'Day',
+    'Week',
+    'Month',
+    'Year',
+  ];
+  List<List<OrdersModel>> listOfDateLists = [];
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xff2c4260),
-      height: MediaQuery.of(context).size.height,
-      child: Center(
-        child: AspectRatio(
-          aspectRatio: 1.7,
-          child: Card(
-            elevation: 0,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-            color: const Color(0xff2c4260),
-            child: const BarChartScreen(),
+    final orders = Provider.of<List<OrdersModel>>(context);
+    List<List<OrdersModel>> listOfDateLists =
+        ArrageByDateLogic().calculation(orders, item);
+    max = ArrageByDateLogic().maxNumber();
+
+    return Scaffold(
+      appBar: AppBar(
+          centerTitle: true,
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              const Text(
+                'Earnings Insights',
+                style: TextStyle(
+                    fontSize: 21.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          excludeHeaderSemantics: true,
+          backgroundColor: Colors.grey[50],
+          // automaticallyImplyLeading: false,
+          elevation: 3,
+          iconTheme: const IconThemeData(color: Colors.black)),
+      body: Container(
+        color: const Color.fromARGB(255, 255, 255, 255),
+        height: MediaQuery.of(context).size.height,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 70,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  // border: Border.all(width: 1, color: Colors.black),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade400,
+                      blurRadius: 5.0, //effect of softening the shadow
+                      spreadRadius: 2.1, //effecet of extending the shadow
+                      offset: const Offset(
+                          0.0, //horizontal
+                          0.0 //vertical
+                          ),
+                    ),
+                  ],
+                ),
+                child: ToggleSwitch(
+                  minWidth: 90.0,
+                  minHeight: 60.0,
+                  fontSize: 16.0,
+                  initialLabelIndex: items.indexOf(item),
+                  activeBgColor: const [
+                    Color.fromARGB(255, 71, 69, 0),
+                    Color.fromARGB(255, 49, 49, 49),
+                    Color.fromARGB(255, 71, 69, 0)
+                  ],
+                  activeFgColor: Colors.white,
+                  inactiveBgColor: const Color(0xFFFFF600),
+                  inactiveFgColor: Colors.grey[900],
+                  totalSwitches: 4,
+                  labels: const [
+                    'Day',
+                    'Week',
+                    'Month',
+                    'Year',
+                  ],
+                  onToggle: (index) {
+                    setState(() {
+                      item = items[index!];
+                      max = 0;
+                    });
+
+                    print('switched to: $index');
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 0,
+              ),
+              orders == null
+                  ? const Center(
+                      child: SpinKitCircle(
+                      color: Colors.black,
+                      size: 50.0,
+                    ))
+                  : orders.length == 0
+                      ? const Center(
+                          child: SpinKitCircle(
+                          color: Colors.black,
+                          size: 50.0,
+                        ))
+                      : Column(
+                          children: [
+                            Container(
+                              child: orders.isEmpty
+                                  ? Center(
+                                      child: Text(
+                                          'You don\'t have any orders yet.',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.grey[400],
+                                              fontWeight: FontWeight.w600)),
+                                    )
+                                  : Center(
+                                      child: CustomBarChart(
+                                          listOfDateLists: listOfDateLists,
+                                          item: item,),
+                                    ),
+                            ),
+                           IncomeStat(completeOrders: orders)
+                          ],
+                        ),
+            ],
           ),
         ),
       ),
