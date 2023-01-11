@@ -67,57 +67,48 @@ class BarChartSample3State extends State<BarChartSample3> {
               const SizedBox(
                 height: 70,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  // border: Border.all(width: 1, color: Colors.black),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade400,
-                      blurRadius: 5.0, //effect of softening the shadow
-                      spreadRadius: 2.1, //effecet of extending the shadow
-                      offset: const Offset(
-                          0.0, //horizontal
-                          0.0 //vertical
-                          ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(10),
                     ),
-                  ],
-                ),
-                child: ToggleSwitch(
-                  minWidth: 90.0,
-                  minHeight: 60.0,
-                  fontSize: 16.0,
-                  initialLabelIndex: items.indexOf(item),
-                  activeBgColor: const [
-                    Color.fromARGB(255, 71, 69, 0),
-                    Color.fromARGB(255, 49, 49, 49),
-                    Color.fromARGB(255, 71, 69, 0)
-                  ],
-                  activeFgColor: Colors.white,
-                  inactiveBgColor: const Color(0xFFFFF600),
-                  inactiveFgColor: Colors.grey[900],
-                  totalSwitches: 4,
-                  labels: const [
-                    'Day',
-                    'Week',
-                    'Month',
-                    'Year',
-                  ],
-                  onToggle: (index) {
-                    setState(() {
-                      item = items[index!];
-                      max = 0;
-                    });
+                   border: Border.all(width: 1, color: Color(0xFFC5C5C5)),
+                  ),
+                  child: ToggleSwitch(
+                    minWidth: MediaQuery.of(context).size.width,
+                    minHeight: 60.0,
+                    fontSize: 16.0,
+                    initialLabelIndex: items.indexOf(item),
+                    activeBgColor: const [
+                      Color.fromARGB(255, 71, 69, 0),
+                      Color.fromARGB(255, 49, 49, 49),
+                      Color.fromARGB(255, 71, 69, 0)
+                    ],
+                    activeFgColor: Colors.white,
+                    inactiveBgColor: const Color(0xFFFFF600),
+                    inactiveFgColor: Colors.grey[900],
+                    totalSwitches: 4,
+                    labels: const [
+                      'Day',
+                      'Week',
+                      'Month',
+                      'Year',
+                    ],
+                    onToggle: (index) {
+                      setState(() {
+                        item = items[index!];
+                        max = 0;
+                      });
 
-                    print('switched to: $index');
-                  },
+                      print('switched to: $index');
+                    },
+                  ),
                 ),
               ),
-              const SizedBox(
-                height: 0,
-              ),
+              
               orders == null
                   ? const Center(
                       child: SpinKitCircle(
@@ -144,11 +135,13 @@ class BarChartSample3State extends State<BarChartSample3> {
                                     )
                                   : Center(
                                       child: CustomBarChart(
-                                          listOfDateLists: listOfDateLists,
-                                          item: item,),
+                                        listOfDateLists: listOfDateLists,
+                                        item: item,
+                                      ),
                                     ),
                             ),
-                           IncomeStat(completeOrders: orders)
+                            
+                            IncomeStat(completeOrders: orders)
                           ],
                         ),
             ],

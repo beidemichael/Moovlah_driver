@@ -28,17 +28,7 @@ class IncomeStat extends StatelessWidget {
         height: 160.0,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade600,
-              blurRadius: 1.0, //effect of softening the shadow
-              spreadRadius: 0.5, //effecet of extending the shadow
-              offset: const Offset(
-                  0.0, //horizontal
-                  1.0 //vertical
-                  ),
-            ),
-          ],
+          border: Border.all(width: 1, color: Color(0xFFC5C5C5)),
           color: Colors.white,
           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         ),

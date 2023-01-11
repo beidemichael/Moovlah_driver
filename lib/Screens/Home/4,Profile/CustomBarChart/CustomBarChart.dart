@@ -36,7 +36,6 @@ class _CustomBarChartState extends State<CustomBarChart> {
   @override
   Widget build(BuildContext context) {
     checkMax(widget.listOfDateLists);
-    print("Max : " + max.toString());
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -50,82 +49,86 @@ class _CustomBarChartState extends State<CustomBarChart> {
         ),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
           itemCount: widget.listOfDateLists.length,
           itemBuilder: (context, index) {
-            return Container(
-              height: MediaQuery.of(context).size.width,
-              width: 90,
-              child: Stack(
-                children: [
-                  Positioned(
-                    bottom: 50.0,
-                    top: 0.0,
-                    right: 0,
-                    left: 0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Text(
-                            widget.listOfDateLists[index].length.toString(),
-                            style: const TextStyle(
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          width: 40,
-                          height: MediaQuery.of(context).size.width - 50,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25.0),
-                            ),
-                            color: Color.fromARGB(255, 209, 209, 0),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 50.0,
-                    top: 0.0,
-                    right: 0,
-                    left: 0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 40,
-                          height: max == 0
-                              ? 100
-                              : ((widget.listOfDateLists[index].length / max) *
-                                  ((MediaQuery.of(context).size.width) - 50)),
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25.0),
-                            ),
-                            color: Color.fromARGB(255, 39, 39, 39),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                      bottom: 0,
-                      left: 0,
+            return Center(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.width+20,
+                width: 90,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      bottom: 50.0,
+                      top: 0.0,
                       right: 0,
-                      child: BottomText(
-                          item: widget.item,
-                          listOfDateLists: widget.listOfDateLists,
-                          index: index)),
-                ],
+                      left: 0,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Text(
+                              widget.listOfDateLists[index].length.toString(),
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            width: 40,
+                            height: MediaQuery.of(context).size.width - 50,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25.0),
+                              ),
+                              color: Color.fromARGB(255, 209, 209, 0),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 50.0,
+                      top: 0.0,
+                      right: 0,
+                      left: 0,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 40,
+                            height: max == 0
+                                ? 100
+                                : ((widget.listOfDateLists[index].length / max) *
+                                    ((MediaQuery.of(context).size.width) - 50)),
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25.0),
+                              ),
+                              color: Color.fromARGB(255, 39, 39, 39),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: BottomText(
+                            item: widget.item,
+                            listOfDateLists: widget.listOfDateLists,
+                            index: index)),
+                  ],
+                ),
               ),
             );
           },
