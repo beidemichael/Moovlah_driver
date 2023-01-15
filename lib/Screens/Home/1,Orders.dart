@@ -100,7 +100,7 @@ class _OrdersState extends State<Orders> {
             ),
             Container(
               color: Colors.white,
-              height: MediaQuery.of(context).size.height - 180,
+              height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: ListView.builder(
                   physics: const BouncingScrollPhysics(

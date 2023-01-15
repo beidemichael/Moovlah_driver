@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart'
 import '../Models/models.dart';
 
 class DatabaseService {
-  // ignore: prefer_typing_uninitialized_variables
   var userUid;
 
   DatabaseService({this.userUid});
@@ -160,7 +159,7 @@ class DatabaseService {
 
   Stream<List<OrdersModel>> get orders {
     return orderCollection
-        .where('isTaken', isEqualTo: false)
+        .where('driverUserUid', isEqualTo: userUid)
         .orderBy('time', descending: true)
         .snapshots()
         .handleError((onError) {

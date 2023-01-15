@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -163,7 +164,7 @@ class _ProfileState extends State<Profile> {
                     builder: (context) => MultiProvider(
                       providers: [
                         StreamProvider<List<OrdersModel>>.value(
-                          value: DatabaseService().orders,
+                          value: DatabaseService(userUid: FirebaseAuth.instance.currentUser?.uid).orders,
                           initialData: const [],
                           catchError: (_, __) => [],
                         ),
@@ -182,7 +183,7 @@ class _ProfileState extends State<Profile> {
               onTap: () {
                 AuthServices.signOut();
               },
-              child: choices('Logout', FontAwesomeIcons.piggyBank, 'bottom')),
+              child: choices('Logout', FontAwesomeIcons.rightFromBracket, 'bottom')),
         ],
       ),
     );

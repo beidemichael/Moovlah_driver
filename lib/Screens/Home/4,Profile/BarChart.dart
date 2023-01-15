@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -35,7 +36,7 @@ class BarChartSample3State extends State<BarChartSample3> {
     List<List<OrdersModel>> listOfDateLists =
         ArrageByDateLogic().calculation(orders, item);
     max = ArrageByDateLogic().maxNumber();
-
+    print(FirebaseAuth.instance.currentUser?.uid);
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
@@ -75,7 +76,7 @@ class BarChartSample3State extends State<BarChartSample3> {
                     borderRadius: const BorderRadius.all(
                       Radius.circular(10),
                     ),
-                   border: Border.all(width: 1, color: Color(0xFFC5C5C5)),
+                    border: Border.all(width: 1, color: Color(0xFFC5C5C5)),
                   ),
                   child: ToggleSwitch(
                     minWidth: MediaQuery.of(context).size.width,
@@ -108,42 +109,38 @@ class BarChartSample3State extends State<BarChartSample3> {
                   ),
                 ),
               ),
-              
               orders == null
                   ? const Center(
                       child: SpinKitCircle(
-                      color: Colors.black,
-                      size: 50.0,
-                    ))
-                  : orders.length == 0
-                      ? const Center(
-                          child: SpinKitCircle(
-                          color: Colors.black,
-                          size: 50.0,
-                        ))
-                      : Column(
-                          children: [
-                            Container(
-                              child: orders.isEmpty
-                                  ? Center(
-                                      child: Text(
-                                          'You don\'t have any orders yet.',
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.grey[400],
-                                              fontWeight: FontWeight.w600)),
-                                    )
-                                  : Center(
-                                      child: CustomBarChart(
-                                        listOfDateLists: listOfDateLists,
-                                        item: item,
-                                      ),
-                                    ),
-                            ),
-                            
-                            IncomeStat(completeOrders: orders)
-                          ],
+                        color: Colors.black,
+                        size: 50.0,
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        Container(
+                          child: orders.isEmpty
+                              ? SizedBox(
+                                  height: MediaQuery.of(context).size.width,
+                                  child: Center(
+                                    child: Text(
+                                        'You don\'t have any orders yet.',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.grey[400],
+                                            fontWeight: FontWeight.w600)),
+                                  ),
+                                )
+                              : Center(
+                                  child: CustomBarChart(
+                                    listOfDateLists: listOfDateLists,
+                                    item: item,
+                                  ),
+                                ),
                         ),
+                        IncomeStat(completeOrders: orders)
+                      ],
+                    ),
             ],
           ),
         ),

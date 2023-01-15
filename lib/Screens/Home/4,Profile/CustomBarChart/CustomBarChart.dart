@@ -49,13 +49,13 @@ class _CustomBarChartState extends State<CustomBarChart> {
         ),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
           itemCount: widget.listOfDateLists.length,
           itemBuilder: (context, index) {
             return Center(
               child: SizedBox(
-                height: MediaQuery.of(context).size.width+20,
+                height: MediaQuery.of(context).size.width + 20,
                 width: 90,
                 child: Stack(
                   children: [
@@ -107,7 +107,8 @@ class _CustomBarChartState extends State<CustomBarChart> {
                             width: 40,
                             height: max == 0
                                 ? 100
-                                : ((widget.listOfDateLists[index].length / max) *
+                                : ((widget.listOfDateLists[index].length /
+                                        max) *
                                     ((MediaQuery.of(context).size.width) - 50)),
                             decoration: const BoxDecoration(
                               borderRadius: BorderRadius.all(
